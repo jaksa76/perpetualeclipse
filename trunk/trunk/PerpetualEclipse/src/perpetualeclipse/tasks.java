@@ -15,8 +15,8 @@ DONE updating a project from svn            MED
 
 DONE building a project                     HIGH
 DONE building a plugin project              HIGH
-TODO building a feature                     HIGH
-TODO building an RCP product                HIGH
+DONE building a feature                     HIGH
+DONE building an RCP product                HIGH
 DONE getting build results                  HIGH
 
 DONE running a test                         HIGH
