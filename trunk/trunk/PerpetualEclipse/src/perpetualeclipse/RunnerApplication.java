@@ -13,6 +13,18 @@ public class RunnerApplication implements IPlatformRunnable {
 		}
 
 		Perpetual perpetual = new Perpetual();
+		
+         for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+
+            if ("run".equals(arg)) { perpetual.run(args[++i]);
+            } else if ("compile".equals(arg)) { perpetual.compileProject(args[++i]);                
+            } else if ("exportPlugin".equals(arg)) { perpetual.exportPlugin(args[++i], args[++i]);                
+            } else if ("exportFeature".equals(arg)) { perpetual.exportFeature(args[++i], args[++i]); 
+            } else if ("exportProduct".equals(arg)) { perpetual.exportProduct(args[++i], args[++i]);
+            } else { System.out.println("could not recognize " + arg); }
+        }
+
 		perpetual.updateProject("p1");
 		perpetual.exportPlugin("org.asdf.codesearch", "C:\\temp\\");
 		perpetual.compileProject("PerpetualEclipse");
@@ -22,8 +34,6 @@ public class RunnerApplication implements IPlatformRunnable {
 	}
 	
 	public Object run(Object argsObject) throws Exception {
-		System.out.println("RunnerApplication.run()");
-
 		final String[] args = (String[]) argsObject;
 		
 		Display display = PlatformUI.createDisplay();
@@ -33,8 +43,8 @@ public class RunnerApplication implements IPlatformRunnable {
 					try {
 						waitUntilWorkbenchStarted();
 						cycle(args);
-						closeWorkbench();
-					} catch (Exception e) { e.printStackTrace(); }
+					} catch (Exception e) { e.printStackTrace(); 
+					} finally { closeWorkbench(); }
 				}
 			}.start();
 
