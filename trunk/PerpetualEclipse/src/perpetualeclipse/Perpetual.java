@@ -10,6 +10,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
@@ -30,14 +31,14 @@ import org.eclipse.pde.internal.core.PDECore;
 import org.eclipse.pde.internal.core.TargetPlatform;
 import org.eclipse.pde.internal.core.WorkspaceModelManager;
 import org.eclipse.pde.internal.core.exports.FeatureExportInfo;
+import org.eclipse.pde.internal.core.exports.FeatureExportOperation;
+import org.eclipse.pde.internal.core.exports.PluginExportOperation;
+import org.eclipse.pde.internal.core.exports.ProductExportOperation;
 import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 import org.eclipse.pde.internal.core.iproduct.IProductFeature;
 import org.eclipse.pde.internal.core.iproduct.IProductModel;
 import org.eclipse.pde.internal.core.iproduct.IProductPlugin;
 import org.eclipse.pde.internal.core.product.WorkspaceProductModel;
-import org.eclipse.pde.internal.ui.build.FeatureExportJob;
-import org.eclipse.pde.internal.ui.build.PluginExportJob;
-import org.eclipse.pde.internal.ui.build.ProductExportJob;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -48,6 +49,8 @@ import perpetualeclipse.Report.TestReport;
 
 public class Perpetual {
 
+	private static NullProgressMonitor nullProgressMonitor = new NullProgressMonitor();
+	
 	private final class TestListener implements ITestRunListener {
 		public TestReport testReport;
 		private boolean currentTestFailed = false;
@@ -141,56 +144,49 @@ public class Perpetual {
 		} catch (CoreException e) { e.printStackTrace(); }
 	}
 
-	public void exportPlugin(final String name, final String destination) throws TargetNotFoundException {
+	public void exportPlugin(final String name, final String destination) throws Exception {
 		FeatureExportInfo info = new FeatureExportInfo() {{
+			items = new Object[] {getPlugin(name)};
+			destinationDirectory = destination;
 			toDirectory = true;
 			useJarFormat = true;
-			exportSource = false;
-			destinationDirectory = destination;
-			zipFileName = null;
-			items = new Object[] {getPlugin(name)};
-			signingInfo = null;
 		}};
 
-		System.out.println("exporting plugin " + name + " to " + destination + "...");
-		PluginExportJob job = new PluginExportJob(info);
-		new WaitForJob(job);
+		runOperation(name, destination, new PluginExportOperation(info));
+	}
+
+	private void runOperation(final String name, final String destination, FeatureExportOperation operation) throws Exception {
+		System.out.println("exporting " + name + " to " + destination + "...");
+		operation.run(nullProgressMonitor);
+		if (operation.hasErrors()) 
+			throw new Exception("Errors during export of " 
+				+ name + " see the log file in " + destination + "/logs.zip");
 		System.out.println(" done.");
 	}
 
-	public void exportFeature(final String name, final String destination) throws TargetNotFoundException {
+	public void exportFeature(final String name, final String destination) throws Exception {
 		FeatureExportInfo info = new FeatureExportInfo() {{
+			items = new Object[] {getFeature(name)};
+			destinationDirectory = destination;
 			toDirectory = true;
 			useJarFormat = true;
-			exportSource = false;
-			destinationDirectory = destination;
-			zipFileName = null;
-			items = new Object[] {getFeature(name)};
-			signingInfo = null;
 		}};
 
-		System.out.println("exporting feature " + name + " to " + destination + "...");
-		FeatureExportJob job = new FeatureExportJob(info);
-		new WaitForJob(job);
-		System.out.println(" done.");
+		runOperation(name, destination, new FeatureExportOperation(info));
 	}
 
 	public void exportProduct(final String path, final String destination) throws Exception {
 		final IProductModel productModel = getProduct(path);
+		final String name = productModel.getProduct().getName();
 
 		FeatureExportInfo info = new FeatureExportInfo() {{
-			toDirectory = false;
-			exportSource = false;
-			destinationDirectory = destination;
-			zipFileName = productModel.getProduct().getName() + ".zip";
 			items = productModel.getProduct().useFeatures() ? getFeatures(productModel) : getPlugins(productModel);
-			signingInfo = null;
+			destinationDirectory = destination;
+			toDirectory = false;
+			zipFileName = name + ".zip";
 		}};
 
-		System.out.println("exporting product " + path + " to " + destination + "...");
-		ProductExportJob job = new ProductExportJob(info, productModel, "");
-		new WaitForJob(job);
-		System.out.println(" done.");        
+		runOperation(name, destination, new ProductExportOperation(info, productModel.getProduct(), ""));
 	}
 	
     private IFeatureModel[] getFeatures(IProductModel productModel) {

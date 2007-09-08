@@ -25,8 +25,8 @@ DONE getting test results                   HIGH
 
 TODO creating the jar file of a project     MED
 DONE exporting a plugin                     HIGH
-TODO exporting a feature                    HIGH
-TODO exporting a product                    HIGH
+DONE exporting a feature                    HIGH
+DONE exporting a product                    HIGH
 
 TODO history								LO
 
