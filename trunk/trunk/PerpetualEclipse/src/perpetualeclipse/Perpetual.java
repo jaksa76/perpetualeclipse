@@ -12,16 +12,21 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.Launch;
 import org.eclipse.jdt.core.IJavaModelMarker;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.junit.ITestRunListener;
 import org.eclipse.jdt.junit.JUnitCore;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMRunner;
+import org.eclipse.jdt.launching.JavaLaunchDelegate;
+import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.VMRunnerConfiguration;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.State;
 import org.eclipse.pde.core.IModel;
@@ -44,104 +49,74 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
-import perpetualeclipse.Report.BuildReport;
-import perpetualeclipse.Report.TestReport;
+import report.BuildReport;
+import report.TestCase;
+import report.TestReport;
+
 
 public class Perpetual {
 
-	private static NullProgressMonitor nullProgressMonitor = new NullProgressMonitor();
-	
 	private final class TestListener implements ITestRunListener {
-		public TestReport testReport;
-		private boolean currentTestFailed = false;
+		private final TestReport report;
 
-		public void testEnded(String testId, String testName) {
-			System.out.println("test ended " + testName);
-			if (!currentTestFailed) testReport.addTestSuccess(testName);
-			currentTestFailed = false;
-		}
+		TestCase currentTestCase;
 
-		public void testFailed(int status, String testId, String testName, String trace) {
-			System.out.println("test failed " + testName);
-			testReport.addTestFailure(testName, head(trace, 50));
-			currentTestFailed = true;
-		}
-
-		public void testReran(String testId, String testClass, String testName, int status, String trace) {
-			System.out.println("test reran: " + testName);
-		}
-
-		public void testRunEnded(long elapsedTime) {
-			System.out.println("test run ended after " + elapsedTime);
-		}
-
-		public void testRunStarted(int testCount) {
-			System.out.println("running " + testCount + " tests");
-		}
-
-		public void testRunStopped(long elapsedTime) {
-			System.out.println("test run stopped after " + elapsedTime);
-		}
-
-		public void testRunTerminated() {
-			System.out.println("test run terminated");			
+		private TestListener(TestReport report) {
+			this.report = report;
 		}
 
 		public void testStarted(String testId, String testName) {
-			System.out.println("test started: " + testName);			
-		}
-	}
-
-	private class WaitForJob extends JobChangeAdapter {
-		boolean done = false;
-
-		public WaitForJob(Job job) { 
-			job.addJobChangeListener(this);
-			job.schedule();
-			while (!done) {
-				try { Thread.sleep(1000); } catch (InterruptedException e) {}
-			}
+			currentTestCase.started();
+			String name = testName.substring(0, testName.indexOf('('));
+			String classname = testName.substring(testName.indexOf('(') + 1, testName.lastIndexOf(')'));
+			currentTestCase = new TestCase(name, classname);
 		}
 
-		public void done(IJobChangeEvent event) { 
-			this.done = true; 
+		public void testFailed(int status, String testId, String testName, String trace) {
+						currentTestCase.failed(trace);
+		//				if (status == STATUS_FAILURE) ;
+		//				else if (status == STATUS_ERROR) ;
+					}
+
+		public void testEnded(String testId, String testName) {
+			currentTestCase.finished();
+			report.addTestCase(currentTestCase);
 		}
+
+		public void testReran(String testId, String testClass, String testName, int status, String trace) {}
+		public void testRunEnded(long elapsedTime) {}
+		public void testRunStarted(int testCount) {}
+		public void testRunStopped(long elapsedTime) {}
+		public void testRunTerminated() {}
 	}
 
-	ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-	Report report = new Report();
-	private TestListener testListener;
-
-	public Perpetual() {
-		testListener = new TestListener();
-		JUnitCore.addTestRunListener(testListener);
-	}
+	private static NullProgressMonitor nullProgressMonitor = new NullProgressMonitor();
+	private static ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 
 	public String head(String trace, int i) {
 		if (trace.length() <= i) return trace;
 		else return trace.substring(0, i) + "...";
 	}
 
-	public void compileProject(String projectName) {
-		try {
-			IProject project = getProject(projectName);
-			project.refreshLocal(IResource.DEPTH_INFINITE, null);
-			System.out.println("building " + project.getName());
-			project.build(IncrementalProjectBuilder.FULL_BUILD, null);
-			BuildReport buildReport = report.createBuildReport(project.getName());
-			IMarker[] markers = project.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
-			System.out.println("found " + markers.length + " problems");
-			for (IMarker marker : markers) {
-				if (((Integer)marker.getAttribute("severity")) > 1) {
-					String errorMessage = (String) marker.getAttribute("message");
-					buildReport.addError(errorMessage);
-					System.out.println(errorMessage);
-				}
-//				for (Object key: marker.getAttributes().keySet()) {
-//				System.out.println(key + ": " + marker.getAttributes().get(key));
-//				}
+	public BuildReport compileProject(String projectName) throws CoreException {
+		IProject project = getProject(projectName);
+		BuildReport buildReport = new BuildReport(project.getName());
+
+		System.out.println("building " + project.getName());
+		project.build(IncrementalProjectBuilder.FULL_BUILD, null);
+
+		IMarker[] markers = project.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
+		System.out.println("found " + markers.length + " problems");
+
+		for (IMarker marker : markers) {
+			if (((Integer)marker.getAttribute("severity")) > 1) {
+				String errorMessage = (String) marker.getAttribute("message");
+				buildReport.addError(errorMessage);
+				System.out.println(errorMessage);
 			}
-		} catch (CoreException e) { e.printStackTrace(); }
+		}
+
+		return buildReport;
 	}
 
 	public void exportPlugin(final String name, final String destination) throws Exception {
@@ -180,7 +155,7 @@ public class Perpetual {
 		final String name = productModel.getProduct().getName();
 
 		FeatureExportInfo info = new FeatureExportInfo() {{
-			items = productModel.getProduct().useFeatures() ? getFeatures(productModel) : getPlugins(productModel);
+			items = productModel.getProduct().useFeatures() ? getProductFeatures(productModel) : getProductPlugins(productModel);
 			destinationDirectory = destination;
 			toDirectory = false;
 			zipFileName = name + ".zip";
@@ -189,7 +164,7 @@ public class Perpetual {
 		runOperation(name, destination, new ProductExportOperation(info, productModel.getProduct(), ""));
 	}
 	
-    private IFeatureModel[] getFeatures(IProductModel productModel) {
+    private IFeatureModel[] getProductFeatures(IProductModel productModel) {
         ArrayList list = new ArrayList();
         FeatureModelManager manager = PDECore.getDefault().getFeatureModelManager();
         IProductFeature[] features = productModel.getProduct().getFeatures();
@@ -200,7 +175,7 @@ public class Perpetual {
         return (IFeatureModel[]) list.toArray(new IFeatureModel[list.size()]);
     }
 
-    private BundleDescription[] getPlugins(IProductModel productModel) {
+    private BundleDescription[] getProductPlugins(IProductModel productModel) {
         ArrayList list = new ArrayList();
         State state = TargetPlatform.getState();
         IProductPlugin[] plugins = productModel.getProduct().getPlugins();
@@ -220,57 +195,30 @@ public class Perpetual {
 		return projects;
 	}
 
-	public void run(String target) throws CoreException, TargetNotFoundException {
+	public TestReport run(String target) throws CoreException, TargetNotFoundException {
 		ILaunchConfiguration configuration = getLaunchConfiguration(target);
 
-		final TestReport2 testReport = new TestReport2(target);
-
-		ITestRunListener listener = new ITestRunListener() {
-			TestCase testCase;
-			long testStartTime;
-
-			public void testStarted(String testId, String testName) {
-				testStartTime = System.currentTimeMillis();
-				String name = testName.substring(0, testName.indexOf('('));
-				String classname = testName.substring(testName.indexOf('(') + 1, testName.lastIndexOf(')'));
-				testCase = new TestCase(name, classname);
-			}
-
-			public void testFailed(int status, String testId, String testName, String trace) {
-				testCase.failed = true;
-				testCase.status = status;
-				if (status == STATUS_FAILURE) testReport.numberOfFailures++;
-				if (status == STATUS_ERROR) testReport.numberOfErrors++;
-				testCase.failureMessage = trace;
-			}
-
-			public void testEnded(String testId, String testName) {
-				testCase.time = System.currentTimeMillis() - testStartTime;
-				testReport.tests.add(testCase);
-			}
-
-			public void testReran(String testId, String testClass, String testName, int status, String trace) {}
-			public void testRunEnded(long elapsedTime) {}
-			public void testRunStarted(int testCount) {}
-			public void testRunStopped(long elapsedTime) {}
-			public void testRunTerminated() {}
-		};
+		final TestReport testReport = new TestReport(configuration.getName());
+		ITestRunListener listener = new TestListener(testReport);
+		
 		JUnitCore.addTestRunListener(listener);
-
-		run(configuration);
+		
+		try {
+			ILaunch launch = configuration.launch(ILaunchManager.RUN_MODE, null);
+			while (!launch.isTerminated()) Thread.sleep(1000);
+		} catch (Exception e) { 
+			e.printStackTrace(); 
+		} finally { JUnitCore.removeTestRunListener(listener); }
+				
+		return testReport;
 	}
-
-	public void updateProject(String projectName) throws SVNException {
+	
+	public void updateProject(String projectName) throws SVNException, CoreException {
 		IProject project = getProject(projectName);
 
 		SVNClientManager clientManager = SVNClientManager.newInstance();
 		SVNUpdateClient updateClient = clientManager.getUpdateClient();
 		long revisionNumber = updateClient.doUpdate(project.getLocation().toFile(), SVNRevision.HEAD, true);
-
-//		String[] path = new String[] {project.getLocation().toString()};
-//		IRepositoryLocation repositoryLocation = SVNRemoteStorage.instance().getRepositoryLocation(project);
-//		ISVNClientWrapper svnClient = repositoryLocation.acquireSVNProxy();
-//		svnClient.update(path, Revision.HEAD, true, true, new SVNNullProgressMonitor());
 	}
 
 	private ILaunchConfiguration getLaunchConfiguration(String name) throws CoreException, TargetNotFoundException {
@@ -317,22 +265,15 @@ public class Perpetual {
 		return PDECore.getDefault().findFeature(name).getModel();
 	}
 
-	private IProject getProject(String projectName) {
+	private IProject getProject(String projectName) throws CoreException {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		project.refreshLocal(IResource.DEPTH_INFINITE, null);
 		return project;
 	}
 
 	private boolean hasBuildProperties(IPluginModelBase model) {
 		File file = new File(model.getInstallLocation(),"build.properties"); //$NON-NLS-1$
 		return file.exists();
-	}
-
-	private void run(ILaunchConfiguration configuration) {
-		try {
-			testListener.testReport = report.createTestReport(configuration.getName());
-			ILaunch launch = configuration.launch(ILaunchManager.RUN_MODE, null);
-			while (!launch.isTerminated()) Thread.sleep(1000);
-		} catch (Exception e) { e.printStackTrace(); }
 	}
 
 	protected boolean isValidModel(IModel model) {
