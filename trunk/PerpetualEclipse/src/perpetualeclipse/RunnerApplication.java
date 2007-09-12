@@ -18,6 +18,7 @@ public class RunnerApplication implements IPlatformRunnable {
             String arg = args[i];
 
             if ("run".equals(arg)) { perpetual.run(args[++i]);
+            } else if ("run2".equals(arg)) { perpetual.run2(args[++i], args[++i]);                
             } else if ("compile".equals(arg)) { perpetual.compileProject(args[++i]);                
             } else if ("exportPlugin".equals(arg)) { perpetual.exportPlugin(args[++i], args[++i]);                
             } else if ("exportFeature".equals(arg)) { perpetual.exportFeature(args[++i], args[++i]); 
@@ -25,12 +26,12 @@ public class RunnerApplication implements IPlatformRunnable {
             } else { System.out.println("could not recognize " + arg); }
         }
 
-		perpetual.updateProject("p1");
-		perpetual.exportPlugin("org.asdf.codesearch", "C:\\temp\\");
-		perpetual.compileProject("PerpetualEclipse");
-		perpetual.compileProject("p2");
-		perpetual.run("DummyTest");
-		perpetual.run("DummyPDETest");
+//		perpetual.updateProject("p1");
+//		perpetual.exportPlugin("org.asdf.codesearch", "C:\\temp\\");
+//		perpetual.compileProject("PerpetualEclipse");
+//		perpetual.compileProject("p2");
+//		perpetual.run("DummyTest");
+//		perpetual.run("DummyPDETest");
 	}
 	
 	public Object run(Object argsObject) throws Exception {

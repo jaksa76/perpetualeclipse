@@ -11,7 +11,8 @@ import org.mortbay.jetty.Request;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
 
-import perpetualeclipse.Report;
+import perpetualeclipse.History;
+
 
 public class WebInterface {
 	private Server server;
@@ -22,12 +23,14 @@ public class WebInterface {
 		
 	public WebInterface(int port) throws Exception {
 		Handler handler = new AbstractHandler() {
-		    public void handle(String target, HttpServletRequest request, HttpServletResponse response, int dispatch) 
+		    private History history = History.getInstance();
+
+			public void handle(String target, HttpServletRequest request, HttpServletResponse response, int dispatch) 
 		        throws IOException, ServletException {
 		        response.setContentType("text/html");
 		        response.setStatus(HttpServletResponse.SC_OK);
 		        response.getWriter().println("<html><body>");
-		        response.getWriter().println(Report.getCurrentReport().toHTML());
+				response.getWriter().println(history.getLatestReport().toHTML());
 		        response.getWriter().println("</body></html>");
 		        ((Request)request).setHandled(true);
 		    }
