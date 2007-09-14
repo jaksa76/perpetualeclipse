@@ -3,7 +3,7 @@ package perpetualeclipse;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import perpetual.eclipse.webinterface.WebInterface;
+import perpetualeclipse.webinterface.WebInterface;
 
 /**
  * The activator class controls the plug-in life cycle
