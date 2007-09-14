@@ -1,4 +1,4 @@
-package perpetualeclipse.report;
+package test;
 
 import java.io.File;
 

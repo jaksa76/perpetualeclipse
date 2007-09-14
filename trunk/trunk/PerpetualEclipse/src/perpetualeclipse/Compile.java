@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaModelMarker;
 
 import perpetualeclipse.eclipse.Eclipse;
-import report.CompileReport;
+import perpetualeclipse.report.CompileReport;
 
 public class Compile {
 

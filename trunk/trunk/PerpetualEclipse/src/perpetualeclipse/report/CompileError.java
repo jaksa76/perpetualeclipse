@@ -1,7 +1,7 @@
 /**
  * 
  */
-package report;
+package perpetualeclipse.report;
 
 public class CompileError {
 	private final String message;
