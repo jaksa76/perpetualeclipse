@@ -3,10 +3,10 @@
  */
 package report;
 
-public class BuildError {
+public class CompileError {
 	private final String message;
 
-	public BuildError(String message) {
+	public CompileError(String message) {
 		this.message = message;
 	}
 

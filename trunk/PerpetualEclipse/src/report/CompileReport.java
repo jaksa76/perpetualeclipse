@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BuildReport {
+public class CompileReport {
 	private final String projectName;
-	private List<BuildError> errors = new ArrayList<BuildError>();
+	private List<CompileError> errors = new ArrayList<CompileError>();
 
-	public BuildReport(String projectName) {
+	public CompileReport(String projectName) {
 		this.projectName = projectName;
 	}
 
@@ -20,14 +20,14 @@ public class BuildReport {
 	}
 	
 	public void addError(String errorMessage) {
-		this.errors.add(new BuildError(errorMessage));
+		this.errors.add(new CompileError(errorMessage));
 	}
 	
 	public String toHTML() {
 		if (errors.size() == 0) return "<p>Build of " + projectName + " successful.</p>";
 		else {
 			String html = "<p>Build of " + projectName + " failed <ul>";
-			for (BuildError error : errors) {
+			for (CompileError error : errors) {
 				html += error.toHTML();
 			}
 			html += "</ul></p>";
