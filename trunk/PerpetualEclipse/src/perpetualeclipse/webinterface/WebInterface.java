@@ -1,4 +1,4 @@
-package perpetual.eclipse.webinterface;
+package perpetualeclipse.webinterface;
 
 import java.io.IOException;
 
