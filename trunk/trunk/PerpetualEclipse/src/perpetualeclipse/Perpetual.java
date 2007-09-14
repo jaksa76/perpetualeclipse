@@ -49,7 +49,7 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
-import report.BuildReport;
+import report.CompileReport;
 import report.TestCase;
 import report.TestReport;
 
@@ -98,9 +98,9 @@ public class Perpetual {
 		else return trace.substring(0, i) + "...";
 	}
 
-	public BuildReport compileProject(String projectName) throws CoreException {
+	public CompileReport compileProject(String projectName) throws CoreException {
 		IProject project = getProject(projectName);
-		BuildReport buildReport = new BuildReport(project.getName());
+		CompileReport buildReport = new CompileReport(project.getName());
 
 		System.out.println("building " + project.getName());
 		project.build(IncrementalProjectBuilder.FULL_BUILD, null);
