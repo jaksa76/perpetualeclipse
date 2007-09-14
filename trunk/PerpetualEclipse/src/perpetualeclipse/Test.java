@@ -8,8 +8,8 @@ import org.eclipse.jdt.junit.ITestRunListener;
 import org.eclipse.jdt.junit.JUnitCore;
 
 import perpetualeclipse.eclipse.Eclipse;
-import report.TestCase;
-import report.TestReport;
+import perpetualeclipse.report.TestCase;
+import perpetualeclipse.report.TestReport;
 
 public class Test {
 

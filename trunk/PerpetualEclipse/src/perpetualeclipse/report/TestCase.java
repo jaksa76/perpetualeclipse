@@ -7,7 +7,7 @@
 */
 
 
-package report;
+package perpetualeclipse.report;
 
 /**
  *

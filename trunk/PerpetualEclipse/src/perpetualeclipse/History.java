@@ -3,7 +3,8 @@ package perpetualeclipse;
 import java.util.ArrayList;
 import java.util.List;
 
-import report.Report;
+import perpetualeclipse.report.Report;
+
 
 public class History {
 	private static History instance = new History();
