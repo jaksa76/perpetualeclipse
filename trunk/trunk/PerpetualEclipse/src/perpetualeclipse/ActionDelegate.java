@@ -19,8 +19,7 @@ public class ActionDelegate implements IWorkbenchWindowActionDelegate {
 
 	public void run(IAction action) {
 		try {
-			Perpetual runner = new Perpetual();
-			runner.run("test");
+			new Test().run("test");
 		} catch (Exception e) {
 			say(e.getMessage());
 		}

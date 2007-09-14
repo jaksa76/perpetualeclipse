@@ -17,8 +17,8 @@ public class RunnerApplication implements IPlatformRunnable {
          for (int i = 0; i < args.length; i++) {
             String arg = args[i];
 
-            if ("run".equals(arg)) { perpetual.run(args[++i]);
-            } else if ("compile".equals(arg)) { perpetual.compileProject(args[++i]);                
+            if ("run".equals(arg)) { new Test().run(args[++i]);
+            } else if ("compile".equals(arg)) { new Compile().compileProject(args[++i]);                
             } else if ("exportPlugin".equals(arg)) { perpetual.exportPlugin(args[++i], args[++i]);                
             } else if ("exportFeature".equals(arg)) { perpetual.exportFeature(args[++i], args[++i]); 
             } else if ("exportProduct".equals(arg)) { perpetual.exportProduct(args[++i], args[++i]);
