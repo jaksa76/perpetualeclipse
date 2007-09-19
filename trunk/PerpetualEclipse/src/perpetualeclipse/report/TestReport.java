@@ -8,7 +8,7 @@ import java.util.List;
 
 
 
-public class TestReport {
+public class TestReport implements Report {
 	private final String configurationName;
 	private final List<TestCase> tests = new ArrayList<TestCase>();
 	private int failures = 0;

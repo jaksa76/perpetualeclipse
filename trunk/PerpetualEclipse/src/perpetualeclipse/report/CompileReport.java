@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CompileReport {
+public class CompileReport implements Report {
 	private final String projectName;
 	private List<CompileError> errors = new ArrayList<CompileError>();
 

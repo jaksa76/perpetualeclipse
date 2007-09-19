@@ -19,7 +19,7 @@ public class ActionDelegate implements IWorkbenchWindowActionDelegate {
 
 	public void run(IAction action) {
 		try {
-			new Test().run("test");
+//			new Test("test").execute();
 		} catch (Exception e) {
 			say(e.getMessage());
 		}

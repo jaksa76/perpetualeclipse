@@ -3,7 +3,7 @@
  */
 package perpetualeclipse.report;
 
-public class UpdateReport {
+public class UpdateReport implements Report {
 	private String name;
 	private int numberOfUpdatedResources;
 	

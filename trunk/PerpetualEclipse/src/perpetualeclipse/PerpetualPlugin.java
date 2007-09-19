@@ -3,6 +3,9 @@ package perpetualeclipse;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import perpetualeclipse.webinterface.DummyXMLContentProvider;
+import perpetualeclipse.webinterface.FlexSecurityConfigurationContentProvider;
+import perpetualeclipse.webinterface.SimpleReportContentProvider;
 import perpetualeclipse.webinterface.WebInterface;
 
 /**
@@ -31,7 +34,7 @@ public class PerpetualPlugin extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		this.webInterface = new WebInterface(8080);
+		initWebInterface();		
 	}
 
 	/*
@@ -42,6 +45,7 @@ public class PerpetualPlugin extends AbstractUIPlugin {
 		plugin = null;
 		super.stop(context);
 		this.webInterface.stop();
+		webInterface = null;
 	}
 
 	/**
@@ -51,6 +55,17 @@ public class PerpetualPlugin extends AbstractUIPlugin {
 	 */
 	public static PerpetualPlugin getDefault() {
 		return plugin;
+	}
+
+	public WebInterface getWebInterface() {
+		return webInterface;
+	}
+
+	private void initWebInterface() throws Exception {
+		webInterface = new WebInterface(8080);
+		webInterface.addContentProvider("/", new SimpleReportContentProvider());
+		webInterface.addContentProvider("/dummy", new DummyXMLContentProvider());
+		webInterface.addContentProvider("/crossdomain.xml", new FlexSecurityConfigurationContentProvider());
 	}
 
 }
