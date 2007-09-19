@@ -11,9 +11,14 @@ import perpetualeclipse.eclipse.Eclipse;
 import perpetualeclipse.report.TestCase;
 import perpetualeclipse.report.TestReport;
 
-public class Test {
+public class TestTask implements Task {
+	private final String target;
 
-	public TestReport run(String target) throws CoreException, TargetNotFoundException {
+	public TestTask(String target) {
+		this.target = target;
+	}
+
+	public TestReport execute() throws CoreException, TargetNotFoundException {
 		ILaunchConfiguration configuration = Eclipse.getLaunchConfiguration(target);
 	
 		final TestReport testReport = new TestReport(configuration.getName());
@@ -31,7 +36,7 @@ public class Test {
 		return testReport;
 	}
 	
-	final class TestListener implements ITestRunListener {
+	private class TestListener implements ITestRunListener {
 		private final TestReport report;
 
 		TestCase currentTestCase;

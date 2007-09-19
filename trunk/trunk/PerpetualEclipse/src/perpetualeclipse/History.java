@@ -3,7 +3,7 @@ package perpetualeclipse;
 import java.util.ArrayList;
 import java.util.List;
 
-import perpetualeclipse.report.Report;
+import perpetualeclipse.report.BuildReport;
 
 
 public class History {
@@ -11,14 +11,14 @@ public class History {
 	
 	public static History getInstance() { return instance; }
 
-	private Report latestReport;
-	private List<Report> reports = new ArrayList<Report>();
+	private BuildReport latestReport;
+	private List<BuildReport> reports = new ArrayList<BuildReport>();
 	
-	public Report getLatestReport() {
+	public BuildReport getLatestReport() {
 		return latestReport;
 	}
 	
-	public void addReport(Report report) {
+	public void addReport(BuildReport report) {
 		reports.add(report);
 		this.latestReport = report;
 	}

@@ -10,9 +10,14 @@ import org.eclipse.jdt.core.IJavaModelMarker;
 import perpetualeclipse.eclipse.Eclipse;
 import perpetualeclipse.report.CompileReport;
 
-public class Compile {
+public class CompileTask implements Task{
+	private final String projectName;
 
-	public CompileReport compileProject(String projectName) throws CoreException {
+	public CompileTask(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public CompileReport execute() throws CoreException {
 		IProject project = Eclipse.getProject(projectName);
 		CompileReport buildReport = new CompileReport(project.getName());
 	
