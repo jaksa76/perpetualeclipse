@@ -10,7 +10,6 @@
          <action
                class="perpetualeclipse.ActionDelegate"
                enablesFor="*"
-               icon="icons/red button.gif"
                id="PerpetualEclipse.action1"
                label="Push Me"
                style="push"
