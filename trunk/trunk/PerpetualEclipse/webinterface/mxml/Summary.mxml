@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+   creationComplete="myService.send();">
+    
+    <mx:HTTPService 
+        id="myService"
+        url="http://localhost:8080/dummy" 
+        resultFormat="e4x"
+        result="myResultHandler(event);"
+        fault="myFaultHandler(event);"
+    />
+    
+    <mx:Script>
+        <![CDATA[
+            import mx.controls.Alert;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            
+            [Bindable] private var contents : XML;
+
+            // Result handler - gets called after RSS is loaded.
+            private function myResultHandler(event:ResultEvent) : void {
+                contents = event.result as XML;
+                //Alert.show("", "got: " + contents.toString());
+            }
+            
+            // Fault handler - displays the error
+            private function myFaultHandler(event:FaultEvent) : void {
+                Alert.show(event.fault.message, "Could not load data");
+            }
+        ]]>
+    </mx:Script>
+    
+    <mx:Text data="{contents.piece[0]}"/>
+    <mx:HorizontalList dataProvider="{contents.piece}" width="600" height="200">
+      <mx:itemRenderer>
+        <mx:Component>
+          <mx:VBox width="200" height="200">
+            <mx:Text text="{data.name}"/>
+            <mx:Text text="{data.price}"/>
+            <mx:Text text="{data.quantity}"/>
+          </mx:VBox>
+        </mx:Component>
+      </mx:itemRenderer>
+    </mx:HorizontalList>
+
+</mx:Application>
