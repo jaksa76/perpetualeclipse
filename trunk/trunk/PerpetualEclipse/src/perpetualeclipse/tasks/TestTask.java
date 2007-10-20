@@ -1,4 +1,4 @@
-package perpetualeclipse;
+package perpetualeclipse.tasks;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunch;
@@ -7,6 +7,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jdt.junit.ITestRunListener;
 import org.eclipse.jdt.junit.JUnitCore;
 
+import perpetualeclipse.TargetNotFoundException;
 import perpetualeclipse.eclipse.Eclipse;
 import perpetualeclipse.report.TestResult;
 import perpetualeclipse.report.TestReport;

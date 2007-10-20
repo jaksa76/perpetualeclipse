@@ -1,4 +1,4 @@
-package perpetualeclipse;
+package perpetualeclipse.tasks;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;

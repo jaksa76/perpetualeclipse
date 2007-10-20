@@ -1,4 +1,4 @@
-package perpetualeclipse;
+package perpetualeclipse.tasks;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.pde.internal.core.exports.FeatureExportOperation;

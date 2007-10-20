@@ -6,6 +6,10 @@ import java.util.List;
 import perpetualeclipse.report.BuildFailureReport;
 import perpetualeclipse.report.BuildReport;
 import perpetualeclipse.report.BuildSummary;
+import perpetualeclipse.tasks.CompileTask;
+import perpetualeclipse.tasks.ExportTask;
+import perpetualeclipse.tasks.Task;
+import perpetualeclipse.tasks.TestTask;
 
 /**
  * A Build is a related set of tasks. It consists of four phases: update, compile, test and package.

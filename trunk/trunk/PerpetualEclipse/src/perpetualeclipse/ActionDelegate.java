@@ -7,6 +7,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
+import perpetualeclipse.tasks.TestTask;
+
 /**
  * Just used for testing purposes when launched in interactive mode.
  * 

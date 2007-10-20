@@ -7,6 +7,7 @@ import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
 import perpetualeclipse.eclipse.Eclipse;
 import perpetualeclipse.report.UpdateReport;
+import perpetualeclipse.tasks.Task;
 
 public class UpdateTask implements Task {
 	private final String projectName;

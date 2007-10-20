@@ -7,6 +7,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 
+import perpetualeclipse.tasks.CompileTask;
+import perpetualeclipse.tasks.ExportFeatureTask;
+import perpetualeclipse.tasks.ExportPluginTask;
+import perpetualeclipse.tasks.ExportProductTask;
+import perpetualeclipse.tasks.TestTask;
+
 /**
  * This application is the entry point when running in server mode.
  * 
