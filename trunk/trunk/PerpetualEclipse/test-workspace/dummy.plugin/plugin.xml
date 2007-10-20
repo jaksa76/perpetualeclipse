@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         id="dummy.application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="dummy.plugin.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="Plugin Perspective"
+            class="dummy.plugin.Perspective"
+            id="dummy.plugin.perspective">
+      </perspective>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="dummy.plugin.dummy.application"
+            name="Dummy Product"/>
+   </extension>
+
+</plugin>
