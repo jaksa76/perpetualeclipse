@@ -13,6 +13,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import perpetualeclipse.report.CompileReport;
 import perpetualeclipse.report.TestReport;
+import perpetualeclipse.tasks.CompileTask;
+import perpetualeclipse.tasks.ExportFeatureTask;
+import perpetualeclipse.tasks.ExportPluginTask;
+import perpetualeclipse.tasks.ExportProductTask;
+import perpetualeclipse.tasks.TestTask;
 
 public class PerpetualTest extends TestCase {
 
