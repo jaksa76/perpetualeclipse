@@ -1,6 +1,7 @@
 package perpetualeclipse;
 
 import perpetualeclipse.report.BuildReport;
+import perpetualeclipse.tasks.Build;
 
 /**
  * A Schedule determines when a {@link Build} will be executed. It is based an interval. 

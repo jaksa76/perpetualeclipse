@@ -7,6 +7,7 @@ import java.util.Map;
 
 import perpetualeclipse.report.BuildReport;
 import perpetualeclipse.report.OverviewReport;
+import perpetualeclipse.tasks.Build;
 
 
 public class BuildManager {

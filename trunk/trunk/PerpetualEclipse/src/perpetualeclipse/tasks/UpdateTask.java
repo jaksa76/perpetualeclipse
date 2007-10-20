@@ -1,4 +1,4 @@
-package perpetualeclipse;
+package perpetualeclipse.tasks;
 
 import org.eclipse.core.resources.IProject;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
@@ -7,12 +7,11 @@ import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
 import perpetualeclipse.eclipse.Eclipse;
 import perpetualeclipse.report.UpdateReport;
-import perpetualeclipse.tasks.Task;
 
 public class UpdateTask implements Task {
 	private final String projectName;
 
-	UpdateTask(String projectName) {
+	public UpdateTask(String projectName) {
 		this.projectName = projectName;
 	}
 	

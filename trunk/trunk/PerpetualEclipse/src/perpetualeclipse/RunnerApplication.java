@@ -12,6 +12,7 @@ import perpetualeclipse.tasks.ExportFeatureTask;
 import perpetualeclipse.tasks.ExportPluginTask;
 import perpetualeclipse.tasks.ExportProductTask;
 import perpetualeclipse.tasks.TestTask;
+import perpetualeclipse.tasks.UpdateTask;
 
 /**
  * This application is the entry point when running in server mode.

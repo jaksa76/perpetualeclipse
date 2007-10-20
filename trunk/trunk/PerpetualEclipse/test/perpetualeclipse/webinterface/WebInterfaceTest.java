@@ -8,9 +8,9 @@ import static perpetualeclipse.webinterface.WebInterfaceTestUtils.urlOnLocalhost
 import java.util.Map;
 
 import junit.framework.TestCase;
-import perpetualeclipse.Build;
 import perpetualeclipse.BuildManager;
 import perpetualeclipse.report.BuildReport;
+import perpetualeclipse.tasks.Build;
 
 
 

@@ -2,8 +2,8 @@ package perpetualeclipse.webinterface;
 
 import java.util.Map;
 
-import perpetualeclipse.Build;
 import perpetualeclipse.BuildManager;
+import perpetualeclipse.tasks.Build;
 
 
 public class BuildReportContentProvider implements ContentProvider {
