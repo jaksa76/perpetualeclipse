@@ -3,9 +3,10 @@ package perpetualeclipse;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import perpetualeclipse.webinterface.BuildReportContentProvider;
+import perpetualeclipse.webinterface.BuildSummaryContentProvider;
 import perpetualeclipse.webinterface.DummyXMLContentProvider;
 import perpetualeclipse.webinterface.FlexSecurityConfigurationContentProvider;
-import perpetualeclipse.webinterface.SimpleReportContentProvider;
 import perpetualeclipse.webinterface.WebInterface;
 
 /**
@@ -63,9 +64,7 @@ public class PerpetualPlugin extends AbstractUIPlugin {
 
 	private void initWebInterface() throws Exception {
 		webInterface = new WebInterface(8080);
-		webInterface.addContentProvider("/", new SimpleReportContentProvider());
-		webInterface.addContentProvider("/dummy", new DummyXMLContentProvider());
-		webInterface.addContentProvider("/crossdomain.xml", new FlexSecurityConfigurationContentProvider());
+//		webInterface.addContentProvider("/", new SimpleReportContentProvider());
 	}
 
 }

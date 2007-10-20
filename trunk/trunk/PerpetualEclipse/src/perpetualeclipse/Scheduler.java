@@ -1,5 +1,10 @@
 package perpetualeclipse;
 
+/**
+ * Executes builds when they are scheduled.
+ * 
+ * @author Jaksa
+ */
 public class Scheduler {
 	private boolean finished = false;
 	

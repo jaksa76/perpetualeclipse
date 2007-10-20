@@ -1,5 +1,5 @@
 package perpetualeclipse.report;
 
-public interface Report {
+public interface Report extends XMLizable {
 	String toHTML();
 }

@@ -8,7 +8,7 @@ import org.eclipse.jdt.junit.ITestRunListener;
 import org.eclipse.jdt.junit.JUnitCore;
 
 import perpetualeclipse.eclipse.Eclipse;
-import perpetualeclipse.report.TestCase;
+import perpetualeclipse.report.TestResult;
 import perpetualeclipse.report.TestReport;
 
 public class TestTask implements Task {
@@ -39,7 +39,7 @@ public class TestTask implements Task {
 	private class TestListener implements ITestRunListener {
 		private final TestReport report;
 
-		TestCase currentTestCase;
+		TestResult currentTestCase;
 
 		private TestListener(TestReport report) {
 			this.report = report;
@@ -49,7 +49,7 @@ public class TestTask implements Task {
 			currentTestCase.started();
 			String name = testName.substring(0, testName.indexOf('('));
 			String classname = testName.substring(testName.indexOf('(') + 1, testName.lastIndexOf(')'));
-			currentTestCase = new TestCase(name, classname);
+			currentTestCase = new TestResult(name, classname);
 		}
 
 		public void testFailed(int status, String testId, String testName, String trace) {
