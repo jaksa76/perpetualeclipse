@@ -1,4 +1,4 @@
-package perpetualeclipse;
+package perpetualeclipse.tasks;
 
 import perpetualeclipse.report.Report;
 

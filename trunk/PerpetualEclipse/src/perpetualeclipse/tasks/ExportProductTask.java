@@ -1,4 +1,4 @@
-package perpetualeclipse;
+package perpetualeclipse.tasks;
 
 import org.eclipse.pde.internal.core.exports.FeatureExportInfo;
 import org.eclipse.pde.internal.core.exports.ProductExportOperation;
