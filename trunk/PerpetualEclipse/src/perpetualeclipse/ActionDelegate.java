@@ -7,6 +7,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
+/**
+ * Just used for testing purposes when launched in interactive mode.
+ * 
+ * @author Jaksa
+ */
 public class ActionDelegate implements IWorkbenchWindowActionDelegate {
 
 	private Shell shell;
@@ -19,7 +24,7 @@ public class ActionDelegate implements IWorkbenchWindowActionDelegate {
 
 	public void run(IAction action) {
 		try {
-//			new Test("test").execute();
+			new TestTask("test").execute();
 		} catch (Exception e) {
 			say(e.getMessage());
 		}

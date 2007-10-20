@@ -9,22 +9,21 @@
 
 package perpetualeclipse.report;
 
-/**
- *
- * @author Jaksa Vuckovic
- *
- */
-public class TestCase {
-    private final String testName;
-    private final String classname;
-    private long startTime;
-    public long duration;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-    public boolean failed = false;
-    public int status;
+/**
+ * @author Jaksa Vuckovic
+ */
+public class TestResult extends XMLReport {
+    @XStreamAsAttribute private final String testName;
+    @XStreamAsAttribute private final String classname;
+    @XStreamAsAttribute private long startTime;
+    @XStreamAsAttribute public long duration;
+
+    @XStreamAsAttribute public boolean failed = false;
     private String reason;
 
-    public TestCase(String name, String classname) {
+    public TestResult(String name, String classname) {
         this.testName = name;
         this.classname = classname;
     }

@@ -6,6 +6,11 @@ import java.util.List;
 import perpetualeclipse.report.BuildReport;
 
 
+/**
+ * Holds the history of reports. Provides the means to consult the history.
+ * 
+ * @author Jaksa
+ */
 public class History {
 	private static History instance = new History();
 	

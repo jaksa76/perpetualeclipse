@@ -3,7 +3,10 @@
  */
 package perpetualeclipse.report;
 
-public class CompileError {
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+@XStreamAlias("error")
+public class CompileError extends XMLReport {
 	private final String message;
 
 	public CompileError(String message) {

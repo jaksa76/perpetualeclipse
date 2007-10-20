@@ -7,6 +7,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 
+/**
+ * This application is the entry point when running in server mode.
+ * 
+ * @author Jaksa
+ */
 public class RunnerApplication implements IPlatformRunnable {
 
 	private void interpret(String[] args) throws Exception {

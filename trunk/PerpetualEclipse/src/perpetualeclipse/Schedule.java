@@ -2,6 +2,11 @@ package perpetualeclipse;
 
 import perpetualeclipse.report.BuildReport;
 
+/**
+ * A Schedule determines when a {@link Build} will be executed. It is based an interval. 
+ * 
+ * @author Jaksa
+ */
 public class Schedule {
 	private Build build;
 	private long lastTimeRun = 0;
