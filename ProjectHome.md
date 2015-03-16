@@ -1,0 +1,3 @@
+A continuous integration server is a server that polls the code repository and on any change of the code downloads, compiles and  runs the tests on a given project. Perpetual Eclipse is a continuous integration server based on Eclipse that takes advantage of the powerful building tools that come with this IDE. It is particularly suitable for building Eclipse plug-ins and RCP applications.
+
+It is currently under early stage of development.
